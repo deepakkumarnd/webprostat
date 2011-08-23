@@ -1,0 +1,5 @@
+
+This is just an assignment project given to me by my project manager at
+ sourcebits. In this i have parsed a spreadsheet file containg employee 
+ work time information and presnted the output as a new spreadsheet file
+ containg fields projetname, programmer on that project and the total work time for each programmer.
