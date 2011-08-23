@@ -4,20 +4,30 @@ require'rubygems'
 require'roo'
 require 'spreadsheet'
 
+$USER='deepak.kumar@sourcebits.com'                                    # your username
+$PASS='Welcome12#$'													   # your password
+$GOOGLE_KEY='0AtK9NOft3RIndHJpZmlZMFZnV3Rzek1jQzZJZEVtZVE'	           # Google Docs File Identifier
+																	   # You should change the key if you are changing the spreadsheet.
+
 
 class Parsesheet
 	STARTCOLUMN=7
 	STARTROW=5
-	def initialize in_file,out_file
+	def initialize 
 		@week_count=0
 		@output=[]
 		begin
-			@outputfile=out_file
-			@sheet=Openoffice.new(in_file)
-			@sheet.default_sheet=@sheet.sheets.first
+			@sheet=Google.new($GOOGLE_KEY,$USER,$PASS)
+			#@sheet=Openoffice.new("exp.ods")
 		rescue
-			puts "Cannot open the spreadsheet file #{filename}"
+			puts "Cannot access the spreadsheet file"
+			exit -1
 		end
+		@sheet.default_sheet=@sheet.sheets.first
+		tmp=@sheet.sheets.first.split(" ")
+		tmp=tmp[0]+tmp[1]
+		tmp=(tmp+"_"+(Time.now().strftime("%D_%H:%M"))).gsub('/','_')
+		@outputfile=tmp+".xls"
 	end
 	
 	def check_no_weeks
@@ -106,12 +116,12 @@ class Parsesheet
 
 end
 
-if ARGV.length!=2 
-	puts "Usage: spread_sheet_parse <inputfile> <outputfile> \n eg ./spread_sheet_parse a.ods b.xls"
-	exit
-end
+#if ARGV.length!=2 
+#	puts "Usage: spread_sheet_parse <inputfile> <outputfile> \n eg ./spread_sheet_parse a.ods b.xls"
+#	exit
+#end
 
-sh=Parsesheet.new(ARGV[0],ARGV[1])  # put your file name here
+sh=Parsesheet.new  # put your file name here
 sh.check_no_weeks
 sh.find_column_indexes
 sh.find_row_indexes
